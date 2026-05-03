@@ -1,0 +1,374 @@
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --text: #1b2430;
+  --text-soft: #5b6473;
+  --primary: #4f7cff;
+  --primary-pressed: #3a63da;
+  --secondary: #e9eefc;
+  --shadow: 0 12px 30px rgba(15, 34, 72, 0.12);
+  --radius: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: Inter, "SF Pro Text", "SF Pro Display", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at top, #eef3ff 0%, var(--bg) 40%, var(--bg) 100%);
+  color: var(--text);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 16px;
+}
+
+.app__phone-shell {
+  width: 100%;
+  max-width: 430px;
+  display: grid;
+}
+
+.screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.screen--active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pantalla de detalle: imagen a pantalla completa + tarjeta blanca encima */
+.screen-detail.screen--active {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.screen-detail {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  /* Sin padding grande: la foto va de borde a borde; margen solo para la tarjeta */
+  padding: clamp(12px, 4vw, 20px);
+  padding-top: max(12px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  min-height: 100vh;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+
+/* Capa inferior: foto fija ocupando todo el viewport (no solo detrás de la columna estrecha) */
+.screen-detail::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Velo discreto: la foto se nota en casi toda la pantalla; solo el recuadro .content queda blanco */
+.screen-detail::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.18) 100%);
+}
+
+/* En detalle: solo el recuadro .content es “tarjeta”; el resto deja ver la imagen */
+.screen-detail .card.card--detail {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.screen-detail .card__header {
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+/* Título sobre la foto (sin caja blanca a pantalla completa) */
+.screen-detail .screen-title {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* El bloque de texto es el único recuadro blanco sólido; crece y hace scroll si hace falta */
+.screen-detail .content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  background: #ffffff;
+}
+
+/* Botón “Volver”: sin bloque blanco; se lee sobre la foto */
+.screen-detail .btn--secondary {
+  flex-shrink: 0;
+  margin-top: 0;
+  align-self: stretch;
+  background: rgba(0, 0, 0, 0.28);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.screen-detail .btn--secondary:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Temas (Unsplash CDN; requiere internet). Se aplican sobre ::after = pantalla entera */
+.screen-detail[data-theme="que-es"]::after {
+  background-image: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="problema"]::after {
+  background-image: url("https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="funciones-general"]::after {
+  background-image: url("https://images.unsplash.com/photo-1557672172-298e090bd0f1?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="funciones-vip"]::after {
+  background-image: url("https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="colores"]::after {
+  background-image: url("https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="app-movil"]::after {
+  background-image: url("https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="caracteristicas"]::after {
+  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="publico"]::after {
+  background-image: url("https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="mejoras"]::after {
+  background-image: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="morse"]::after {
+  background-image: url("https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1080&q=80");
+}
+
+.screen-detail[data-theme="contacto"]::after {
+  background-image: url("https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1080&q=80");
+}
+
+/* Tarjeta “completa” solo en splash y menú; en detalle el fondo lo cubre la imagen */
+.card:not(.card--detail) {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  min-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.card--centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.card--menu,
+.card--detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card__header {
+  margin-bottom: 4px;
+}
+
+.brand-logo {
+  width: min(100%, 320px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.screen-title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.45;
+  max-width: 32ch;
+}
+
+.tagline--small {
+  margin-top: 6px;
+  font-size: 0.95rem;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 12px;
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.99);
+}
+
+.btn:focus-visible {
+  outline: 3px solid #b8ccff;
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  width: 100%;
+  max-width: 260px;
+  color: #fff;
+  background: var(--primary);
+}
+
+.btn--primary:hover {
+  background: var(--primary-pressed);
+}
+
+.btn--large {
+  min-height: 54px;
+  font-size: 1.06rem;
+  font-weight: 600;
+}
+
+.btn--menu {
+  width: 100%;
+  text-align: left;
+  background: #f1f5ff;
+  color: #21304c;
+  font-weight: 600;
+}
+
+.btn--menu:hover {
+  background: #e5edff;
+}
+
+.btn--secondary {
+  background: var(--secondary);
+  color: #27408f;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.content {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(15, 34, 72, 0.06);
+  color: #1b2430;
+  line-height: 1.62;
+  font-size: 1.02rem;
+  box-shadow: 0 8px 28px rgba(15, 34, 72, 0.1);
+
+  width: fit-content;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content p {
+  margin: 0 0 10px;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+.content ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.content li {
+  margin-bottom: 8px;
+}
+
+.content li::marker {
+  color: #3f73e8;
+}
+
+.color-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dot--red {
+  background: #f44336;
+}
+
+.dot--orange {
+  background: #fb8c00;
+}
+
+.dot--green {
+  background: #43a047;
+}

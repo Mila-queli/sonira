@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>SONIRA | Prototipo Informativo</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <div class="app__phone-shell">
+        <!-- Pantalla 1: Splash -->
+        <section id="screen-splash" class="screen screen--active" aria-label="Pantalla inicial">
+          <article class="card card--centered">
+            <img class="brand-logo" src="./logo-sonira.png" alt="Logo SONIRA" />
+            <p class="tagline">Tecnología accesible que transforma sonido en confianza.</p>
+            <button id="btn-enter" class="btn btn--primary btn--large" type="button">Explorar</button>
+          </article>
+        </section>
+
+        <!-- Pantalla 2: Menú principal -->
+        <section id="screen-menu" class="screen" aria-label="Menú principal">
+          <article class="card card--menu">
+            <header class="card__header">
+              <h2 class="screen-title">SONIRA</h2>
+              <p class="tagline tagline--small">Tecnología accesible que transforma sonido en confianza.</p>
+            </header>
+            <nav class="menu" aria-label="Secciones informativas">
+              <button class="btn btn--menu" type="button" data-section="que-es">¿Qué es el prototipo?</button>
+              <button class="btn btn--menu" type="button" data-section="problema">Problema que resuelve</button>
+              <button class="btn btn--menu" type="button" data-section="funciones-general">Funciones Público general</button>
+              <button class="btn btn--menu" type="button" data-section="funciones-vip">Funciones VIP</button>
+              <button class="btn btn--menu" type="button" data-section="colores">Sistema de colores</button>
+              <button class="btn btn--menu" type="button" data-section="app-movil">Aplicación móvil</button>
+              <button class="btn btn--menu" type="button" data-section="caracteristicas">Características principales</button>
+              <button class="btn btn--menu" type="button" data-section="publico">Público objetivo</button>
+              <button class="btn btn--menu" type="button" data-section="mejoras">Futuras mejoras</button>
+              <button class="btn btn--menu" type="button" data-section="morse">Código Morse</button>
+              <button class="btn btn--menu" type="button" data-section="colaboradores">🤝 Colaboradores</button>
+            </nav>
+          </article>
+        </section>
+
+        <!-- Pantalla 3: Detalle de sección -->
+        <section id="screen-detail" class="screen screen-detail" aria-live="polite" aria-label="Detalle de sección">
+          <article class="card card--detail">
+            <header class="card__header">
+              <h2 id="detail-title" class="screen-title">Sección</h2>
+            </header>
+            <div id="detail-content" class="content"></div>
+            <button id="btn-back" class="btn btn--secondary" type="button">Volver al menú</button>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // Datos de cada sección para renderizado dinámico CON IMÁGENES
+      const sections = {
+        "que-es": {
+          title: "¿Qué es el prototipo?",
+          html: `
+            <video 
+              src="assets/prototipo.mp4" 
+              autoplay 
+              loop 
+              muted 
+              playsinline 
+              class="card-video"
+              style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            </video>
+            <p><strong>SONIRA</strong> es una pulsera inteligente (smartwatch) diseñada para personas con discapacidad auditiva.</p>
+            <p>Características principales:</p>
+            <ul>
+              <li>📱 Conectividad Bluetooth con la app</li>
+              <li>🎨 Sistema de colores para alertas</li>
+              <li>📳 Vibración programable</li>
+              <li>🔋 Batería de larga duración</li>
+              <li>💧 Resistente al agua</li>
+            </ul>
+          `,
+        },
+        problema: {
+          title: "Problema que resuelve",
+          html: `
+            <img src="assets/problema.png" alt="Problema que resuelve" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p>Ayuda a percibir sonidos del entorno mediante colores y vibraciones, disponible para todo el público con instalación gratuita de la app.</p>
+          `,
+        },
+        "funciones-general": {
+          title: "Funciones Público general",
+          html: `
+            <img src="assets/funciones-pg.png" alt="Funciones público general" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p><strong>PRIMERA FUNCIÓN:</strong> Sonidos que percibe la pulsera se envían a la app mediante colores:</p>
+            <ul>
+              <li><strong>Rojo (alerta):</strong> sirena de emergencia, alarma de incendio, claxon fuerte, grito o golpe fuerte.</li>
+              <li><strong>Naranja (advertencia):</strong> timbre de puerta, teléfono sonando, alguien llamando, golpe en la puerta.</li>
+              <li><strong>Verde (normal):</strong> conversaciones cercanas, ruido ambiente, televisión.</li>
+            </ul>
+            <p><strong>SEGUNDA FUNCIÓN (modo madre-hijo):</strong> Detecta el llanto del bebé y envía notificación a la app: "Llorando" o "Peligro".</p>
+          `,
+        },
+        "funciones-vip": {
+          title: "Funciones VIP",
+          html: `
+            <img src="assets/funciones-pv.png" alt="Funciones VIP" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <ul>
+              <li><strong>Traducción:</strong> Convierte conversaciones a texto para que el usuario las lea.</li>
+              <li><strong>Alarma:</strong> Programar horario con vibración como despertador.</li>
+            </ul>
+            <p><em>Requiere membresía de pago en la app.</em></p>
+          `,
+        },
+        colores: {
+          title: "Sistema de colores",
+          html: `
+            <img src="assets/colores.jpeg" alt="Sistema de colores" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p class="color-line"><span class="dot dot--red"></span>🔴 Rojo = Alerta</p>
+            <p class="color-line"><span class="dot dot--orange"></span>🟠 Naranja = Advertencia</p>
+            <p class="color-line"><span class="dot dot--green"></span>🟢 Verde = Normal</p>
+          `,
+        },
+        "app-movil": {
+          title: "Aplicación móvil",
+          html: `
+            <img src="assets/app.jpeg" alt="Aplicación móvil" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p>App gratuita para público general. Versión VIP con membresía para funciones avanzadas.</p>
+          `,
+        },
+        caracteristicas: {
+          title: "Características principales",
+          html: `
+            <img src="assets/caracteristicas.png" alt="Características principales" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <ul>
+              <li>Vibración programable con distintos patrones para cada tipo de alerta.</li>
+              <li>Resistencia al agua para uso diario en lluvia o actividades cotidianas.</li>
+              <li>Batería de larga duración para operar durante todo el día.</li>
+              <li>Conectividad Bluetooth estable con la aplicación móvil.</li>
+              <li>Modo silencioso inteligente con prioridad para alertas críticas.</li>
+            </ul>
+          `,
+        },
+        publico: {
+          title: "Público objetivo",
+          html: `
+            <img src="assets/publico.png" alt="Público objetivo" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p>Personas con discapacidad auditiva, madres y padres de bebés, y público general interesado en accesibilidad.</p>
+          `,
+        },
+        mejoras: {
+          title: "Futuras mejoras",
+          html: `
+            <img src="assets/mejoras.png" alt="Futuras mejoras" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <ul>
+              <li>Integración con más dispositivos IoT del hogar (timbre, detectores y cámaras).</li>
+              <li>Reconocimiento de un catálogo más amplio de sonidos personalizados.</li>
+              <li>Asistente inteligente con recomendaciones según hábitos del usuario.</li>
+            </ul>
+          `,
+        },
+        morse: {
+          title: "Código Morse",
+          html: `
+            <img src="assets/codigo.png" alt="Código Morse" style="width: 100%; border-radius: 16px; margin-bottom: 16px;">
+            <p>Función especial: Vibraciones que representan sílabas para comprender palabras mediante código Morse.</p>
+          `,
+        },
+        colaboradores: {
+          title: "Colaboradores",
+          html: `
+            <ul style="list-style: none; padding-left: 0;">
+              <li style="margin-bottom: 16px; padding: 12px; background: #f5f7fb; border-radius: 12px;">
+                <strong>👤 Liliana Chávez Pérez</strong><br>
+                📞 <a href="tel:+524412122812" style="color: #4f7cff; text-decoration: none;">+52 441 212 2812</a>
+              </li>
+              <li style="margin-bottom: 16px; padding: 12px; background: #f5f7fb; border-radius: 12px;">
+                <strong>👤 Jesús Reyes López</strong><br>
+                📞 <a href="tel:+524421600426" style="color: #4f7cff; text-decoration: none;">+52 442 160 0426</a>
+              </li>
+              <li style="margin-bottom: 16px; padding: 12px; background: #f5f7fb; border-radius: 12px;">
+                <strong>👤 Luis Alfonso Sánchez García</strong><br>
+                📞 <a href="tel:+524427535118" style="color: #4f7cff; text-decoration: none;">+52 442 753 5118</a>
+              </li>
+              <li style="margin-bottom: 16px; padding: 12px; background: #f5f7fb; border-radius: 12px;">
+                <strong>👤 Milagros Elisheba Quelite Silva</strong><br>
+                📞 <a href="tel:+524424898939" style="color: #4f7cff; text-decoration: none;">+52 442 489 8939</a>
+              </li>
+              <li style="margin-bottom: 16px; padding: 12px; background: #f5f7fb; border-radius: 12px;">
+                <strong>👤 Dulce Karina Montoya Martinez</strong><br>
+                📞 <a href="tel:+524411358186" style="color: #4f7cff; text-decoration: none;">+52 441 135 8186</a>
+              </li>
+            </ul>
+          `,
+        },
+      };
+
+      // Referencias de pantalla y elementos interactivos.
+      const splashScreen = document.getElementById("screen-splash");
+      const menuScreen = document.getElementById("screen-menu");
+      const detailScreen = document.getElementById("screen-detail");
+      const enterButton = document.getElementById("btn-enter");
+      const backButton = document.getElementById("btn-back");
+      const menuButtons = document.querySelectorAll("[data-section]");
+      const detailTitle = document.getElementById("detail-title");
+      const detailContent = document.getElementById("detail-content");
+
+      // Muestra una sola pantalla a la vez (comportamiento SPA).
+      function showScreen(target) {
+        [splashScreen, menuScreen, detailScreen].forEach((screen) => {
+          screen.classList.remove("screen--active");
+        });
+        target.classList.add("screen--active");
+      }
+
+      // Navegación de splash a menú principal.
+      enterButton.addEventListener("click", () => {
+        showScreen(menuScreen);
+      });
+
+      // Navegación del menú hacia cualquier detalle de sección.
+      menuButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const key = button.dataset.section;
+          const data = sections[key];
+
+          if (!data) return;
+
+          detailTitle.textContent = data.title;
+          detailContent.innerHTML = data.html;
+          detailScreen.dataset.theme = key;
+          showScreen(detailScreen);
+        });
+      });
+
+      // Regreso del detalle al menú principal.
+      backButton.addEventListener("click", () => {
+        detailScreen.removeAttribute("data-theme");
+        showScreen(menuScreen);
+      });
+    </script>
+  </body>
+</html>
